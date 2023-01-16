@@ -1,0 +1,59 @@
+DMVPN Phase 2
+--------------
+Configurations
+--------------
+*Advantages are lower bandwidth required from HUB versus Phase 1
+
+HUB:
+----
+
+config t
+!
+int tu0
+ip address x.x.x.x y.y.y.y
+ip mtu 1476
+ip tcp adjust 1436
+tunnel source x.x.x.x
+!
+#NHRP Addition (creates HUB DMVPN)
+ip nhrp network-id 1
+tunnel mode gre multipoint
+
+SPOKE:
+------
+
+config t
+!
+int tu0
+ip address x.x.x.x y.y.y.y
+ip mtu 1476
+ip tcp adjust 1436
+tunnel source x.x.x.x
+!
+#NHRP section
+ip nhrp network-id 1
+ip nhrp nhs x.x.x.x (HUB Tunnel address)
+ip nhrp map x.x.x.x (HUB Tunnel address) y.y.y.y (HUB NBMA address/public facing interface)
+!
+#Phase 2 additions
+tunnel mode gre multipoint
+ip nhrp map multicast x.x.x.x (NBMA address of the HUB)
+
+Helpful Commands:
+-----------------
+show dmvpn
+show ip nhrp
+
+Verify:
+-------
+traceroute x.x.x.x (Spoke Tunnel IP)
+*Do this twice, once you will pass the HUB; second run displays direct tunnel spoke-to-spoke.
+**The first traceroute/contact builds CEF table @ HUB
+     _            _           
+    | |          | |          
+ ___| | __ _  ___| | __  _ __ 
+/ __| |/ _` |/ __| |/ / | '__|
+\__ \ | (_| | (__|   < _| |   
+|___/_|\__,_|\___|_|\_(_)_|   
+Quality Configs
+---------------

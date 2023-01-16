@@ -1,0 +1,42 @@
+DMVPN Phase 1
+--------------
+Configurations
+--------------
+
+HUB:
+----
+
+config t
+!
+int tu0
+ip address x.x.x.x y.y.y.y
+ip mtu 1476
+ip tcp adjust 1436
+tunnel source x.x.x.x
+
+
+SPOKE:
+------
+
+config t
+!
+int tu0
+ip address x.x.x.x y.y.y.y
+ip mtu 1476
+ip tcp adjust 1436
+tunnel source x.x.x.x
+tunnel dest x.x.x.x
+!
+
+Helpful Commands:
+-----------------
+show ip route
+
+     _            _           
+    | |          | |          
+ ___| | __ _  ___| | __  _ __ 
+/ __| |/ _` |/ __| |/ / | '__|
+\__ \ | (_| | (__|   < _| |   
+|___/_|\__,_|\___|_|\_(_)_|   
+Quality Configs
+---------------
